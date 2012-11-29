@@ -151,19 +151,17 @@ function get_file_info($file) {
 
 	  <div id="wrapper">
         <div id="header">
-        	<div class="container">
-	    		<a href="http://sigerr.org/" class="left"><img border='0' src="<?php echo CDN_URL; ?>sigerr.org.png" /></a>
-	            
-	            <div id="email" class="right">
-	            	<table>
-	                	<tr><td>
-	            		<img src="<?php echo CDN_URL; ?>email.png" />
-	                    </td><td>  
-	                    <a href="mailto:julien@sigerr.org"><span class="htext">julien@sigerr.org</span></a>
-	                    </td></tr>
-	                </table>
-	                    
-	            </div>
+    		<a href="http://sigerr.org/" class="left"><img border='0' src="<?php echo CDN_URL; ?>sigerr.org.png" /></a>
+            
+            <div id="email" class="right">
+            	<table>
+                	<tr><td>
+            		<img src="<?php echo CDN_URL; ?>email.png" />
+                    </td><td>  
+                    <a href="mailto:julien@sigerr.org"><span class="htext">julien@sigerr.org</span></a>
+                    </td></tr>
+                </table>
+                    
             </div>
         </div>
         
@@ -235,7 +233,7 @@ function get_file_info($file) {
         </div> <!--! end of #main -->    
         
         <div id="footer">
-    		<p>All rights reserved - <a href="http://sigerr.org/">Julien Bourdeau</a> - http://<?php echo $_SERVER['SERVER_NAME']; ?>
+    		<p>All rights reserved - <a href="http://sigerr.org/">Julien Bourdeau</a> - <a href="http://<?php echo $_SERVER['SERVER_NAME']; ?>">http://<?php echo $_SERVER['SERVER_NAME']; ?></a>
         </div>
       </div> <!--! end of #container -->
 	
