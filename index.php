@@ -75,37 +75,45 @@ function get_file_info($file) {
 	<title><?php echo $cur_dir; ?></title>
     
     <style type="text/css">
+		
+		@font-face {font-family: 'Museo-300';src: url('<?php echo CDN_URL;?>2429BD_1_0.eot');src: url('<?php echo CDN_URL;?>2429BD_1_0.eot?#iefix') format('embedded-opentype'),url('<?php echo CDN_URL;?>2429BD_1_0.woff') format('woff'),url('<?php echo CDN_URL;?>2429BD_1_0.ttf') format('truetype');}
+		@font-face {font-family: 'Museo-500';src: url('<?php echo CDN_URL;?>2429BD_2_0.eot');src: url('<?php echo CDN_URL;?>2429BD_2_0.eot?#iefix') format('embedded-opentype'),url('<?php echo CDN_URL;?>2429BD_2_0.woff') format('woff'),url('<?php echo CDN_URL;?>2429BD_2_0.ttf') format('truetype');}
+		@font-face {font-family: 'Museo-700';src: url('<?php echo CDN_URL;?>2429BD_0_0.eot');src: url('<?php echo CDN_URL;?>2429BD_0_0.eot?#iefix') format('embedded-opentype'),url('<?php echo CDN_URL;?>2429BD_0_0.woff') format('woff'),url('<?php echo CDN_URL;?>2429BD_0_0.ttf') format('truetype');}  
+
 		body {
 			background: #f9f9f9;
 			color: #262626;
 			margin: 0;
+			font-family: 'Museo-300';
 		}
-		#header {
-			background: #262626;
-			height: 37px;
-		}
+
+		::selection{background:#222;color:#fff}
+		::-moz-selection{background:#222;color:#fff}
+
 		a {
 			text-decoration: none;
 			color: #999999;
 		}
 		a:hover {
-			color: #F60; /*vert sigerr: #6AB12F; */
+			color: #F60 !important; /*vert sigerr: #6AB12F; */
+		}
+		#header {
+			background: #262626;
+			color: #f9f9f9;
+			height: 40px;
+		}
+		#header a {
+			color: #f9f9f9;
 		}
 		h2 {
 			margin: 26px 0;
 			font-size: 32px;
 			border-bottom: 1px solid #262626;
-		}
-		.htext {
-			font-size: 17px;
-			color: #f9f9f9;
-		}
-		#email {
-			margin: 0 16px 0 0;
+			font-family: 'Museo-500';
 		}
 		#main {
-			width: 764px;
-			margin: 0 50px;
+			width: 672px;
+			margin: 0 0 0 32px;
 		}
 		table {
 			margin: 0 0 0 32px;
@@ -119,17 +127,13 @@ function get_file_info($file) {
 			font-size: 21px;
 			color: #333333;
 		}
-		table a:active,
-		table a:hover {
-			/*background: #C30;*/
-		}
 		.tablefooter{
 			font-size: 17px;
 			color: #999999;
 			font-style:italic;
 		}
 		#footer {
-			margin: 22px 0;
+			margin: 42px 0;
 			text-align:center;
 			color: #999999;
 		}
@@ -145,26 +149,27 @@ function get_file_info($file) {
 </head>
 <body>
 
-	  <div id="container">
+	  <div id="wrapper">
         <div id="header">
-    		<a href="http://sigerr.org/" class="left"><img border='0' src="<?php echo CDN_URL; ?>sigerr.org.png" /></a>
-            
-            <div id="email" class="right">
-            	<table>
-                	<tr><td>
-            		<img src="<?php echo CDN_URL; ?>email.png" />
-                    </td><td>  
-                    <a href="mailto:julien@sigerr.org"><span class="htext">julien@sigerr.org</span></a>
-                    </td></tr>
-                </table>
-                    
+        	<div class="container">
+	    		<a href="http://sigerr.org/" class="left"><img border='0' src="<?php echo CDN_URL; ?>sigerr.org.png" /></a>
+	            
+	            <div id="email" class="right">
+	            	<table>
+	                	<tr><td>
+	            		<img src="<?php echo CDN_URL; ?>email.png" />
+	                    </td><td>  
+	                    <a href="mailto:julien@sigerr.org"><span class="htext">julien@sigerr.org</span></a>
+	                    </td></tr>
+	                </table>
+	                    
+	            </div>
             </div>
-            
         </div>
         
         <div class="clear"></div>
         
-        <div id="main" role="main">
+        <div id="main" role="main" class="container">
     			
                 <section id="Directories">
                 	<h2>Directories</h2>
@@ -181,7 +186,7 @@ function get_file_info($file) {
 									echo "'> \r\n";
 								echo "\t <td> \r\n \t\t <img src='$url_folder_img' />\r\n \t </td> \r\n";
 								echo "\t <td> \r\n \t\t <a href='$dir' title='$dir'> ";
-									echo name($dir);
+									echo $dir;
 									echo "</a>\r\n \t </td> \r\n";
 								echo "\t <td>";
 									echo "\r\n \t </td> \r\n";
