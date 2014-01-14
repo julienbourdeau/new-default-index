@@ -16,7 +16,7 @@
 /*
  *   Set useful variable
  **************************************************/
-	define('CDN_URL', 'http://cdn.sigerr.org/');
+	define('CDN_URL', 'http://cdn.sigerr.org/assets/');
 	$cur_dir = urldecode(basename($_SERVER['REQUEST_URI']));
 	$url_folder_img = CDN_URL."folder.png";
 	//$url_file_img = CDN_URL."file.png";
