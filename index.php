@@ -18,29 +18,23 @@
  **************************************************/
 	define('CDN_URL', 'http://cdn.sigerr.org/assets/');
 	$cur_dir = urldecode(basename($_SERVER['REQUEST_URI']));
-	$url_folder_img = CDN_URL."folder.png";
-	//$url_file_img = CDN_URL."file.png";
+	$folder_icon_list = array(
+							'std' => CDN_URL.'folder.png',
+							'wp' => CDN_URL.'wp.png',
+						);
 	$file_icon_list = array('aac', 'ai', 'aiff', 'avi', 'css', 'doc', 'docx', 'gif', 'gzip', 'html', 'jpeg', 'jpg', 'js', 'ma', 'mov', 'mp', 'mpeg', 'mpg', 'mv', 'pdf', 'php', 'png', 'psd', 'raw', 'rtf', 'tar', 'tiff', 'txt', 'wav', 'wmv', 'zip');
 	
 /*
  *   Define Functions
  **************************************************/
 
-function get_file_info($file) {
-	$data = array();
+function get_file_info( $file ) {
 	global $file_icon_list;
+	$data = array();
 
 	//Set Name
 	$filename = pathinfo($file);
-	if(strlen($filename['filename']) > 42) {
-		$name = substr($name, 0, 36);
-		$name .= "...";
-		$name .= substr($name, -1, 3);
-		$name .= ".".$filename['extension'];
-	} else {
-		$name = $file;
-	}
-	$data['name'] = $name;
+	$data['name'] = shorten_name($filename['filename'], $filename['extension']);
 
 	//Set Icon
 	if ( in_array($filename['extension'], $file_icon_list) ) {
@@ -64,8 +58,43 @@ function get_file_info($file) {
 
 	return $data;
 }
- 
- 
+
+function get_wp_version( $wp_folder ) {
+	preg_match("/'(.*?)'/", exec( "grep wp_version ".$wp_folder."/wp-includes/version.php" ), $matches);
+	return $matches[1];
+}
+
+function get_wordpress_last_version_number() {
+	$link = `curl http://wordpress.org | grep '<a class="button download-button button-large"'`;
+	preg_match_all("/\<a.*href=\"(.*?)\".*?\>(.*)\<\/a\>+/", $link, $matches, PREG_SET_ORDER);
+	$last_version = str_replace("Download&nbsp;WordPress&nbsp;", '', $matches[0][2]);
+	return $last_version;
+}
+
+function is_wordpress( $folder ) {
+	if(
+		file_exists($folder.'/wp-config.php')
+		&&
+		file_exists($folder.'/wp-admin/')
+		&&
+		file_exists($folder.'/wp-includes/')
+	) return true;
+	else
+		return false;
+}
+
+function shorten_name( $name, $extension ) {
+	if(strlen($name) > 42) {
+		$str = substr($name, 0, 36);
+		$str .= "...";
+		$str .= substr($name, -1, 3);
+		$str .= ".".$extension;
+		return $str;
+	} else {
+		return $name.'.'.$extension;
+	}
+}
+
 ?>
 
 <!DOCTYPE HTML>
@@ -127,6 +156,8 @@ function get_file_info($file) {
 			font-size: 21px;
 			color: #333333;
 		}
+		table tr:odd {background: none;}
+		table tr:even {background: #f2f2f2;}
 		.tablefooter{
 			font-size: 17px;
 			color: #999999;
@@ -137,8 +168,6 @@ function get_file_info($file) {
 			text-align:center;
 			color: #999999;
 		}
-		.odd {background: none;}
-		.even {background: #f2f2f2;}
 		.right {float: right;}
 		.left {float: left;}
 		.clear {clear:both;}
@@ -177,23 +206,34 @@ function get_file_info($file) {
                             <th width="512px"></th>
                             <th width="64px"></th>
                         </tr>
-                    	<?php $count = 1;
-						foreach(glob('*', GLOB_ONLYDIR) as $dir){
-							echo "<tr class='";
-									echo ($count%2 == 0)?"even":"odd";
-									echo "'> \r\n";
-								echo "\t <td> \r\n \t\t <img src='$url_folder_img' />\r\n \t </td> \r\n";
-								echo "\t <td> \r\n \t\t <a href='$dir' title='$dir'> ";
-									echo $dir;
-									echo "</a>\r\n \t </td> \r\n";
-								echo "\t <td>";
-									echo "\r\n \t </td> \r\n";
-							echo "</tr> \r\n";
-							$count++;
-						}
+                    	<?php
+                    	$count = 0;
+						foreach(glob('*', GLOB_ONLYDIR) as $dir):
+							$fullpath = __DIR__.'/'.$dir;
+							if (is_wordpress( $fullpath ))
+								$type = 'wp';
+							else
+								$type = 'std';
 						?>
+							<tr>
+								<td>
+									<img src='<?php echo $folder_icon_list[$type]; ?>' />
+								</td>
+								<td>
+									<a href='$dir' title='$fullpath'>
+										<?php echo $dir; ?>
+									</a>
+								</td>
+								<td>
+									<?php
+										if ( $type == 'wp')
+											echo 'v'.get_wp_version($fullpath);
+									?>
+								</td>
+							</tr>
+						<?php $count++; endforeach; ?>
                     </table>
-                    <p class="tablefooter">The current folder contains <?php echo $count-1; ?> subfolders.</p>
+                    <p class="tablefooter">The current folder contains <?php echo $count; ?> subfolders.</p>
                 </section>
                 
                 <section id="files">
@@ -205,28 +245,28 @@ function get_file_info($file) {
                             <th width="64px"></th>
                         </tr>
                     	<?php
-						$count = 1;
-						foreach(glob('*.*') as $file){
+						$count = 0;
+						foreach(glob('*.*') as $file):
 							if($file == "index.php") continue; //dont display the index.php
 
 							$data = get_file_info($file);
-
-							echo "<tr class='";
-									echo ($count%2 == 0)?"even":"odd";
-									echo "'> \r\n";
-								echo "\t <td> \r\n \t\t <img src='". $data['icon'] ."' />\r\n \t </td> \r\n";
-								echo "\t <td> \r\n \t\t <a href='$file' title='$file'> ";
-									echo $data['name'];
-									echo "</a>\r\n \t </td> \r\n";
-								echo "\t <td>";
-									echo $data['size_str'];
-									echo "\r\n \t </td> \r\n";
-							echo "</tr> \r\n";
-							$count++;
-						}
 						?>
+							<tr>
+								<td>
+									<img src='<?php echo $data['icon']; ?>' />
+								</td>
+								<td>
+									<a href='$file' title='$file'>
+										<?php echo $data['name']; ?>
+									</a>
+								</td>
+								<td>
+									<?php $data['size_str']; ?>
+								</td>
+							</tr>
+						<?php $count++; endforeach; ?>
                     </table>
-                    <p class="tablefooter">The current folder contains <?php echo $count-1; ?> files.</p>
+                    <p class="tablefooter">The current folder contains <?php echo $count; ?> files.</p>
                 </section>
                 
                 
