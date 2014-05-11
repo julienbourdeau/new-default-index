@@ -19,13 +19,14 @@
 	define('CDN_URL', 'http://cdn.sigerr.org/assets/');
 	define('CUR_URL', 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']);
 
-	if ( isset($_GET['dir']) ){
-		define('RELATIVE_BASE_PATH', $_GET['dir']);
-		define('CUR_DIR', __DIR__.'/'.$_GET['dir']);
-	}
-	elseif ( isset($_GET['path']) ) {
-		define('RELATIVE_BASE_PATH', 'TODO');
-		define('CUR_DIR', $_GET['path']);
+	if ( isset($_GET['dir']) ) {
+		$url = __DIR__.'/'.urldecode($_GET['dir']);
+		if ($realpath = realpath($url))
+			if (strcmp(__DIR__, $realpath) > 0)
+				die('You do not have access to this directory');
+
+		define('RELATIVE_BASE_PATH', urldecode($_GET['dir']));
+		define('CUR_DIR', __DIR__.'/'.urldecode($_GET['dir']));
 	}
 	else {
 		define('RELATIVE_BASE_PATH', '.');
