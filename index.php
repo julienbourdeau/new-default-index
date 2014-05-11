@@ -170,8 +170,8 @@ function shorten_name( $name, $extension ) {
 			font-size: 21px;
 			color: #333333;
 		}
-		table tr:odd {background: none;}
-		table tr:even {background: #f2f2f2;}
+		table tr:nth-child(odd) {background: none;}
+		table tr:nth-child(even) {background: #f2f2f2;}
 		.tablefooter{
 			font-size: 17px;
 			color: #999999;
