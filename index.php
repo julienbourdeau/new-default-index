@@ -17,7 +17,21 @@
  *   Set useful variable
  **************************************************/
 	define('CDN_URL', 'http://cdn.sigerr.org/assets/');
-	$cur_dir = urldecode(basename($_SERVER['REQUEST_URI']));
+	define('CUR_URL', 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']);
+
+	if ( isset($_GET['dir']) ){
+		define('RELATIVE_BASE_PATH', $_GET['dir']);
+		define('CUR_DIR', __DIR__.'/'.$_GET['dir']);
+	}
+	elseif ( isset($_GET['path']) ) {
+		define('RELATIVE_BASE_PATH', 'TODO');
+		define('CUR_DIR', $_GET['path']);
+	}
+	else {
+		define('RELATIVE_BASE_PATH', '.');
+		define('CUR_DIR', __DIR__);
+	}
+
 	$folder_icon_list = array(
 							'std' => CDN_URL.'folder.png',
 							'wp' => CDN_URL.'wp.png',
@@ -87,7 +101,7 @@ function shorten_name( $name, $extension ) {
 	if(strlen($name) > 42) {
 		$str = substr($name, 0, 36);
 		$str .= "...";
-		$str .= substr($name, -1, 3);
+		$str .= substr($name, -3, 3);
 		$str .= ".".$extension;
 		return $str;
 	} else {
@@ -101,7 +115,7 @@ function shorten_name( $name, $extension ) {
 <html lang="en_US">
 <head>
 	<meta charset="UTF-8">
-	<title><?php echo $cur_dir; ?></title>
+	<title><?php echo basename(CUR_DIR); ?></title>
     
     <style type="text/css">
 		
@@ -208,9 +222,9 @@ function shorten_name( $name, $extension ) {
                         </tr>
                     	<?php
                     	$count = 0;
-						foreach(glob('*', GLOB_ONLYDIR) as $dir):
-							$fullpath = __DIR__.'/'.$dir;
-							if (is_wordpress( $fullpath ))
+						foreach (glob(CUR_DIR.'/*', GLOB_ONLYDIR ) as $dir) :
+							$dirname = basename($dir);
+							if (is_wordpress( $dir ))
 								$type = 'wp';
 							else
 								$type = 'std';
@@ -220,14 +234,14 @@ function shorten_name( $name, $extension ) {
 									<img src='<?php echo $folder_icon_list[$type]; ?>' />
 								</td>
 								<td>
-									<a href='$dir' title='$fullpath'>
-										<?php echo $dir; ?>
+									<a href="<?php echo CUR_URL.'?dir='.urlencode(RELATIVE_BASE_PATH.'/'.$dirname); ?>" title='<?php echo $dir; ?>'>
+										<?php echo $dirname; ?>
 									</a>
 								</td>
 								<td>
 									<?php
 										if ( $type == 'wp')
-											echo 'v'.get_wp_version($fullpath);
+											echo 'v'.get_wp_version($dir);
 									?>
 								</td>
 							</tr>
@@ -246,8 +260,9 @@ function shorten_name( $name, $extension ) {
                         </tr>
                     	<?php
 						$count = 0;
-						foreach(glob('*.*') as $file):
-							if($file == "index.php") continue; //dont display the index.php
+						foreach (glob(CUR_DIR.'/*.*') as $file):
+							if ( $file == "index.php" ) continue; //dont display the index.php
+							if ( is_dir($file) ) continue; //dont display directories
 
 							$data = get_file_info($file);
 						?>
@@ -256,7 +271,7 @@ function shorten_name( $name, $extension ) {
 									<img src='<?php echo $data['icon']; ?>' />
 								</td>
 								<td>
-									<a href='$file' title='$file'>
+									<a href='<?php echo RELATIVE_BASE_PATH.'/'.$data['name']; ?>' title='<?php echo $file; ?>'>
 										<?php echo $data['name']; ?>
 									</a>
 								</td>
