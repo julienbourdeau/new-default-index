@@ -219,7 +219,7 @@ function shorten_name( $name, $extension ) {
                     	<tr>
                         	<th width="24px"></th>
                             <th width="512px"></th>
-                            <th width="64px"></th>
+                            <th width="128px"></th>
                         </tr>
                     	<?php
                     	$count = 0;
@@ -257,7 +257,7 @@ function shorten_name( $name, $extension ) {
                     	<tr>
                         	<th width="24px"></th>
                             <th width="512px"></th>
-                            <th width="64px"></th>
+                            <th width="128px"></th>
                         </tr>
                     	<?php
 						$count = 0;
@@ -277,7 +277,7 @@ function shorten_name( $name, $extension ) {
 									</a>
 								</td>
 								<td>
-									<?php $data['size_str']; ?>
+									<?php echo $data['size_str']; ?>
 								</td>
 							</tr>
 						<?php $count++; endforeach; ?>
