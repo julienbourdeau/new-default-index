@@ -11,7 +11,7 @@ Image are provided by http://cdn.sigerr.org/assets but obviously this URL is mea
 
 This is basically what you get.
 
-![]http://cdn.sigerr.org/demo-index-php-728.png?raw=true
+![Screenshot](http://cdn.sigerr.org/demo-index-php-728.png)
 
 ## Special feature
 
