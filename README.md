@@ -5,13 +5,13 @@ Whenever I need to list files and folder on my server I symlink the index.php in
 
 It's "recursive" so if you click on a folder it will be shown in the page.
 
-Image are provided by cdn.sigerr.org/assets but obviously this URL is meant to be changed if you use this 'project'.
+Image are provided by http://cdn.sigerr.org/assets but obviously this URL is meant to be changed if you use this 'project'.
 
 ## Screenshot
 
 This is basically what you get.
 
-http://cdn.sigerr.org/demo-index-php-728.png
+![]http://cdn.sigerr.org/demo-index-php-728.png?raw=true
 
 ## Special feature
 
